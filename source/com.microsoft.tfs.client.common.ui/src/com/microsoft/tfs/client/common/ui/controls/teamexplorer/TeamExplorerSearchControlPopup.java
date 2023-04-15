@@ -144,17 +144,6 @@ class TeamExplorerSearchControlPopup extends PopupDialog {
     }
 
     /**
-     * Returns a set of dialog specific telemetry properties that should be sent
-     * into the DialogOpened telemetry event. The default set of properties is
-     * empty. Derived dialogs may override this method. *
-     * 
-     * @return
-     */
-    protected Map<String, String> getTelemetryProperties() {
-        return new HashMap<String, String>();
-    }
-
-    /**
      * Call to automatically size the popup and its shell to its content.
      */
     private void autoSize() {

@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.IOException;
 
 import com.microsoft.tfs.jni.PlatformMisc;
-import com.microsoft.tfs.jni.internal.LibraryNames;
-import com.microsoft.tfs.jni.loader.NativeLoader;
 import com.microsoft.tfs.util.Check;
 import com.microsoft.tfs.util.Platform;
 
@@ -19,21 +17,16 @@ import com.microsoft.tfs.util.Platform;
  * @threadsafety thread-safe
  */
 public class NativePlatformMisc implements PlatformMisc {
-    /**
-     * This static initializer is a "best-effort" native code loader (no
-     * exceptions thrown for normal load failures).
-     *
-     * Apps with multiple classloaders (like Eclipse) can run this initializer
-     * more than once in a single JVM OS process, and on some platforms
-     * (Windows) the native libraries will fail to load the second time, because
-     * they're already loaded. This failure can be ignored because the native
-     * code will execute fine.
-     */
-    static {
-        NativeLoader.loadLibraryAndLogError(LibraryNames.MISC_LIBRARY_NAME);
-    }
+
+    private final PlatformMisc backend;
 
     public NativePlatformMisc() {
+        if (Platform.isCurrentPlatform(Platform.WINDOWS))
+            backend = new WindowsNativePlatformMisc();
+        else if (Platform.isCurrentPlatform(Platform.MAC_OS_X))
+            backend = new MacOsNativePlatformMisc();
+        else
+            backend = new LinuxNativePlatformMisc();
     }
 
     @Override
@@ -44,14 +37,14 @@ public class NativePlatformMisc implements PlatformMisc {
             return null;
         }
 
-        return nativeGetHomeDirectory(username);
+        return backend.getHomeDirectory(username);
     }
 
     @Override
     public boolean changeCurrentDirectory(final String directory) {
         Check.notNull(directory, "directory"); //$NON-NLS-1$
 
-        if (nativeChangeCurrentDirectory(directory) == 0) {
+        if (backend.changeCurrentDirectory(directory)) {
             /*
              * We must set this variable for Java classes to have any idea that
              * the paths have changed. Canonical path is much nicer to
@@ -75,12 +68,12 @@ public class NativePlatformMisc implements PlatformMisc {
             return -1;
         }
 
-        return nativeGetDefaultCodePage();
+        return backend.getDefaultCodePage();
     }
 
     @Override
     public String getComputerName() {
-        final String name = nativeGetComputerName();
+        final String name = backend.getComputerName();
 
         if (name == null || name.length() == 0) {
             return null;
@@ -93,32 +86,8 @@ public class NativePlatformMisc implements PlatformMisc {
     public String getEnvironmentVariable(final String name) {
         Check.notNullOrEmpty(name, "name"); //$NON-NLS-1$
 
-        /*
-         * On Unix, nativeGetEnvironmentVariable() calls getenv(). The ISO C
-         * standard (as well as Open Group Base Standard IEEE 1003.1-2001, which
-         * defers to ISO C) says getenv() may return a pointer to memory which
-         * may be written to by subsequent or concurrent calls to putenv(). In
-         * short, getenv() and putenv() are notrequired to be thread-safe. On
-         * some platforms, like Solaris, they have always been safe. On others,
-         * they have been unsafe at times.
-         *
-         * Since Java's standard libraries do not implement putenv(), and
-         * System.getenv() caches the environment (on Sun's implementation, at
-         * least), a Java or JNI putenv() implementation wouldn't work with many
-         * existing System.getenv() implementations.
-         *
-         * For these reasons we assume that putenv() won't ever be called in our
-         * Java processes by any thread, so we don't use a lock when calling the
-         * native code that calls getenv().
-         *
-         * http://www.opengroup.org/onlinepubs/009695399/functions/getenv.html
-         */
-
-        /*
-         * On Windows, the native implementation is thread-safe.
-         */
-
-        return nativeGetEnvironmentVariable(name);
+        String value = backend.getEnvironmentVariable(name);
+        return value == null || value.length() == 0 ? null : value;
     }
 
     @Override
@@ -129,36 +98,16 @@ public class NativePlatformMisc implements PlatformMisc {
             return value;
         }
 
-        return nativeExpandEnvironmentString(value);
+        return backend.expandEnvironmentString(value);
     }
 
     @Override
     public String getCurrentIdentityUser() {
-        return nativeGetCurrentIdentityUser();
+        return backend.getCurrentIdentityUser();
     }
 
     @Override
     public String getWellKnownSID(final int wellKnownSIDType, final String domainSIDString) {
-        return nativeGetWellKnownSID(wellKnownSIDType, domainSIDString);
+        return backend.getWellKnownSID(wellKnownSIDType, domainSIDString);
     }
-
-    private static native int nativeChangeCurrentDirectory(String directory);
-
-    private static native String nativeGetComputerName();
-
-    private static native String nativeGetEnvironmentVariable(String name);
-
-    // WARNING: Following only available on Windows.
-
-    private static native int nativeGetDefaultCodePage();
-
-    private static native String nativeGetCurrentIdentityUser();
-
-    private static native String nativeExpandEnvironmentString(String value);
-
-    private static native String nativeGetWellKnownSID(int wellKnownSIDType, String domainSIDString);
-
-    // WARNING: Following only available on Unix.
-
-    private static native String nativeGetHomeDirectory(String username);
 }

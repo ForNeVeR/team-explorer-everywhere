@@ -4,8 +4,7 @@
 package com.microsoft.tfs.jni.internal.console;
 
 import com.microsoft.tfs.jni.Console;
-import com.microsoft.tfs.jni.internal.LibraryNames;
-import com.microsoft.tfs.jni.loader.NativeLoader;
+import com.microsoft.tfs.util.Platform;
 
 /**
  * An implementation of the {@link Console} interface that uses native methods.
@@ -13,48 +12,34 @@ import com.microsoft.tfs.jni.loader.NativeLoader;
  * @threadsafety thread-safe
  */
 public class NativeConsole implements Console {
-    /**
-     * This static initializer is a "best-effort" native code loader (no
-     * exceptions thrown for normal load failures).
-     *
-     * Apps with multiple classloaders (like Eclipse) can run this initializer
-     * more than once in a single JVM OS process, and on some platforms
-     * (Windows) the native libraries will fail to load the second time, because
-     * they're already loaded. This failure can be ignored because the native
-     * code will execute fine.
-     */
-    static {
-        NativeLoader.loadLibraryAndLogError(LibraryNames.CONSOLE_LIBRARY_NAME);
-    }
+
+    private static final Console backend = Platform.isCurrentPlatform(Platform.WINDOWS)
+        ? new WindowsNativeConsole()
+        : new UnixNativeConsole(
+            Platform.isCurrentPlatform(Platform.MAC_OS_X)
+                ? com.microsoft.tfs.jni.internal.unix.macos.LibC.INSTANCE
+                : com.microsoft.tfs.jni.internal.unix.linux.LibC.INSTANCE);
 
     public NativeConsole() {
     }
 
     @Override
     public int getConsoleColumns() {
-        return nativeGetColumns();
+        return backend.getConsoleColumns();
     }
 
     @Override
     public int getConsoleRows() {
-        return nativeGetRows();
+        return backend.getConsoleRows();
     }
 
     @Override
     public boolean disableEcho() {
-        return nativeDisableEcho();
+        return backend.disableEcho();
     }
 
     @Override
     public boolean enableEcho() {
-        return nativeEnableEcho();
+        return backend.enableEcho();
     }
-
-    private static native int nativeGetRows();
-
-    private static native int nativeGetColumns();
-
-    private static native boolean nativeDisableEcho();
-
-    private static native boolean nativeEnableEcho();
 }

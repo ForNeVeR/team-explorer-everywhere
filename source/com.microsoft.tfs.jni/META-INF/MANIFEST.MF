@@ -6,7 +6,9 @@ Bundle-Version: 14.137.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: com.microsoft.tfs.jni.jar
+Bundle-ClassPath: com.microsoft.tfs.jni.jar,
+ libs/jna/jna-5.8.0.jar,
+ libs/jna/jna-platform-5.8.0.jar
 Require-Bundle: com.microsoft.tfs.logging,
  com.microsoft.tfs.util
 Export-Package: com.microsoft.tfs.jni,

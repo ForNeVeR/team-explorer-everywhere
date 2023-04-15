@@ -21,6 +21,7 @@
 		<!-- copy core dependency jars -->
 		<copy todir="${dir.binaries}/${name.dist-directory.sdk}/redist/lib" flatten="true">
 			<fileset dir="${dir.global.build.output.plugins}/com.microsoft.tfs.core/libs" includes="**/*.jar" />
+            <fileset dir="${dir.global.build.output.plugins}/com.microsoft.tfs.jni/libs" includes="**/*.jar" />
 		</copy>
 
 		<!-- copy dependent plugin jars -->
@@ -39,11 +40,6 @@
 		<copy todir="${dir.binaries}/${name.dist-directory.sdk}/redist/lib" flatten="true">
 			<fileset dir="${dir.global.build.output.plugins}/com.microsoft.tfs.core.httpclient" includes="**/*.jar" />
 			<fileset dir="${dir.global.build.output.plugins}/com.microsoft.tfs.logging/lib" includes="**/*.jar" />
-		</copy>
-
-		<!-- copy native libraries -->
-		<copy todir="${dir.binaries}/${name.dist-directory.sdk}/redist/native">
-			<fileset dir="${dir.global.build.output.plugins}/com.microsoft.tfs.jni/os" />
 		</copy>
 
 		<!-- copy samples -->
@@ -123,6 +119,12 @@
 			<zipfileset includes="**"
 			            excludes="META-INF/LICENSE.txt META-INF/NOTICE.txt META-INF/maven/**"
 			            src="${dir.binaries}/${name.dist-directory.sdk}/redist/lib/commons-logging-1.1.3.jar" />
+            <zipfileset includes="**"
+                        excludes="META-INF/LICENSE META-INF/AL2.0 META-INF/LGPL2.1"
+                        src="${dir.binaries}/${name.dist-directory.sdk}/redist/lib/jna-5.8.0.jar" />
+            <zipfileset includes="**"
+                        excludes="META-INF/LICENSE META-INF/AL2.0 META-INF/LGPL2.1"
+                        src="${dir.binaries}/${name.dist-directory.sdk}/redist/lib/jna-platform-5.8.0.jar" />
 		</jar>
 
 		<echo message="[TFSBuildStep] SDK: Generating Javadoc" />
