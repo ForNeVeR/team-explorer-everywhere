@@ -23,8 +23,8 @@ skip_branch_with_pr: true
 cache:
   - .build/downloads -> .appveyor.yml
   - .build/eclipse -> .appveyor.yml
-  - C:/ProgramData/chocolatey/bin -> appveyor.yml
-  - C:/ProgramData/chocolatey/lib -> appveyor.yml
+  - C:/ProgramData/chocolatey/bin -> .appveyor.yml
+  - C:/ProgramData/chocolatey/lib -> .appveyor.yml
 
 artifacts:
   - path: build/output/bin/clc/TEE-CLC-1*.zip
