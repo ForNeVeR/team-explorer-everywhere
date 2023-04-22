@@ -13,8 +13,8 @@ on_finish:
 skip_branch_with_pr: true
 
 cache:
-  - .build/downloads -> .appveyor.yml
-  - .build/eclipse -> .appveyor.yml
+  - .build/downloads -> gradle.properties
+  - .build/eclipse -> gradle.properties
   - C:/ProgramData/chocolatey/bin -> .appveyor.yml
   - C:/ProgramData/chocolatey/lib -> .appveyor.yml
 
