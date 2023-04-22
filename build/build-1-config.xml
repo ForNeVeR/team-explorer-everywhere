@@ -34,9 +34,6 @@
 	-->
 	<target name="read_version_config">
 
-		<!-- Defines the major, minor, and service versions (but not build). -->
-		<property file="${dir.global.buildtooling}/product_version.properties" />
-
 		<!--
 			Callers (Team Build) will almost always set number.version.build explicitly, but default to 
 			something for manual builds. 

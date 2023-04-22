@@ -6,8 +6,14 @@ plugins {
     id("de.undercouch.download") version "5.4.0"
 }
 
+val tfsVersion: String by extra
+val productVersion = tfsVersion.split(".").run { Triple(this[0], this[1], this[2]) }
+
 ant.lifecycleLogLevel = AntBuilder.AntMessagePriority.INFO
 ant.properties["dir.machine.build-runtime"] = file(".build/eclipse/eclipse").path
+ant.properties["number.version.major"] = productVersion.first
+ant.properties["number.version.minor"] = productVersion.second
+ant.properties["number.version.service"] = productVersion.third
 ant.importBuild("build/build.xml")
 
 val downloadsCacheDir: String by extra
