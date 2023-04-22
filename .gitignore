@@ -1,7 +1,7 @@
-/.build/downloads
-/.build/eclipse
 /.gradle
 /.idea
+/build/downloads/
+/build/eclipse/
 /build/resources/
 /build/tmp/
 

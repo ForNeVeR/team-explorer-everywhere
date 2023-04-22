@@ -9,15 +9,9 @@ plugins {
 val tfsVersion: String by extra
 val productVersion = tfsVersion.split(".").run { Triple(this[0], this[1], this[2]) }
 
-ant.lifecycleLogLevel = AntBuilder.AntMessagePriority.INFO
-ant.properties["dir.machine.build-runtime"] = file(".build/eclipse/eclipse").path
-ant.properties["number.version.major"] = productVersion.first
-ant.properties["number.version.minor"] = productVersion.second
-ant.properties["number.version.service"] = productVersion.third
-ant.importBuild("build/build.xml")
-
 val downloadsCacheDir: String by extra
-val eclipseDir: String by extra
+val eclipseBaseDir: String by extra
+val eclipseDir = file(eclipseBaseDir).resolve("eclipse")
 
 fun verifyDownloadedFile(file: File, sha256: String) {
     val digest = MessageDigest.getInstance("SHA-256")
@@ -46,16 +40,30 @@ tasks.register<Download>("download-eclipse") {
     dest(eclipseDownloadPath)
     overwrite(false)
 }
-tasks.register<Copy>("prepare-eclipse") {
+tasks.register("prepare-eclipse") {
     dependsOn("download-eclipse")
     dependsOn("download-egit")
-    doFirst {
+    doLast {
         verifyDownloadedFile(eclipseDownloadPath, eclipseSha256)
         verifyDownloadedFile(eGitDownloadPath, eGitSha256)
+
+        copy {
+            from(zipTree(eclipseDownloadPath))
+            into(eclipseBaseDir)
+        }
+        copy {
+            from(zipTree(eGitDownloadPath))
+            into(eclipseDir)
+        }
     }
-    from(zipTree(eclipseDownloadPath)).into(eclipseDir)
-    from(zipTree(eGitDownloadPath)).into(file(eclipseDir).resolve("eclipse"))
 }
+
+ant.lifecycleLogLevel = AntBuilder.AntMessagePriority.INFO
+ant.properties["dir.machine.build-runtime"] = file(eclipseDir).path
+ant.properties["number.version.major"] = productVersion.first
+ant.properties["number.version.minor"] = productVersion.second
+ant.properties["number.version.service"] = productVersion.third
+ant.importBuild("build/build.xml")
 
 tasks.named("build_4_antrunner") {
     dependsOn("prepare-eclipse")
