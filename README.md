@@ -13,7 +13,7 @@ If you prefer to use Git, you can use any Git client with TFS or Team Services a
 ## Where Can I Get The Command-line Client?
 Download the TEE-CLC-*.zip file in the [Releases](https://github.com/JetBrains/team-explorer-everywhere/releases) area of this repo.
 
-## Building with Ant
+## Building
 ### Install Java 8
 1. We use Java 8 as the minimal supported Java execution environment.
 2. Download and install the JDK for [Java 8][adoptopenjdk]
@@ -26,20 +26,13 @@ Download the TEE-CLC-*.zip file in the [Releases](https://github.com/JetBrains/t
    * (Linux) `PATH=$JAVA_HOME/bin:$PATH`
    * (Mac) `PATH=$JAVA_HOME/bin:$PATH`
     
-### Install Ant 
-1. If you do not already have it, download and install Apache Ant(TM) version 1.9.6 from [Ant Binary Distributions](http://ant.apache.org/bindownload.cgi).
-1. Add the full path of the Ant `bin` directory to the `PATH` system environment variable. You can find more Ant installation details [here](http://ant.apache.org/manual/install.html#installing).
- * (Windows) `SET PATH=C:\dev\apache-ant-1.9.6\bin;%PATH%`
- * (Linux) `PATH=~/dev/apache-ant-1.9.6/bin:$PATH`
- * (Mac) `PATH=~/dev/apache-ant-1.9.6/bin:$PATH`
-
 ### Automated Build
 
 There's a script to download the Eclipse automatically and set up its environment. To do that, execute the following PowerShell scripts:
 
 ```console
 $ pwsh ./scripts/prepare-eclipse.ps1
-$ pwsh ./scripts/build.ps1
+$ ./gradlew build
 ```
     
 ### Install the Eclipse Target Environment

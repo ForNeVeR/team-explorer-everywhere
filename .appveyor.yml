@@ -6,11 +6,10 @@ environment:
 
 install:
   - cinst openjdk8 --version 8.232.9
-  - cinst ant --version 1.10.5 --ignore-dependencies
 before_build:
   - pwsh: scripts/prepare-eclipse.ps1 -EclipseUrl $env:ECLIPSE_URL -EclipseFileHash $env:ECLIPSE_HASH -EGitUrl $env:EGIT_URL -EGitFileHash $env:EGIT_HASH
 build_script:
-  - pwsh: scripts/build.ps1
+  - pwsh: ./gradlew build
 on_finish:
   # upload test results
   - pwsh: |
