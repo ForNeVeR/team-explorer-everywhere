@@ -26,39 +26,16 @@ Download the TEE-CLC-*.zip file in the [Releases](https://github.com/JetBrains/t
    * (Linux) `PATH=$JAVA_HOME/bin:$PATH`
    * (Mac) `PATH=$JAVA_HOME/bin:$PATH`
     
-### Automated Build
+### Build
 
-There's a script to download the Eclipse automatically and set up its environment. To do that, execute the following PowerShell scripts:
-
+Run the following shell command:
 ```console
-$ pwsh ./scripts/prepare-eclipse.ps1
 $ ./gradlew build
 ```
-    
-### Install the Eclipse Target Environment
-Historically, we use Eclipse 3.5.2 as the base target Eclipse version.
-1. Download and install Eclipse Classic from [Eclipse 3.5.2](http://www.eclipse.org/downloads/packages/release/galileo/sr2). On Windows, you may want to use a third party ZIP tool to unzip the Eclipse archive.
-1. Install the [EGit 2.1.0](http://archive.eclipse.org/egit/updates-2.1) plug-in into that Eclipse instance.
 
-### Clone the Repository
-Use the Git tool of your choice to clone the repository into a local path.
-For example, you could use git.exe from a Windows console window:
-```
-mkdir c:\repos
-pushd c:\repos
-git clone https://github.com/Microsoft/team-explorer-everywhere
-```
+Build results can be found in `build\output\clc` and `build\output\sdk`.
 
-### Build
-Note: The Eclipse target installation location is needed as a parameter for the Ant build variable `dir.machine.build-runtime`. For the samples below, we will assume that the target Eclipse version was installed into '\dev\eclipseTargets\352'.
-1. From a terminal/console window, change to the `build` subfolder of the root folder of the team-explorer-everywhere repository
-1. Run ant -Ddir.machine.build-runtime=`<pathToEclipseTarget>`, for example, 
-```
-(Windows) ant -Ddir.machine.build-runtime=c:\Users\<userId>\dev\eclipseTargets\352\
-(Linux) ant -Ddir.machine.build-runtime=/home/<userId>/dev/eclipseTargets/352/
-(Mac) ant -Ddir.machine.build-runtime=/Applications/eclipse-classic/
-``` 
-1. Build results can be found in `build\output`
+Test results are available in `build\output\bin\testresults`.
 
 ## Contributing
 We welcome pull requests. Please fork this repo and send us your contributions.

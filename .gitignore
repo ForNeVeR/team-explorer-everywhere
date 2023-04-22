@@ -3,7 +3,7 @@
 /.gradle
 /.idea
 /build/resources/
-/gradle-build/
+/build/tmp/
 
 bin
 bin-test
