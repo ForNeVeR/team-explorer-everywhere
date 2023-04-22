@@ -9,7 +9,7 @@ install:
 before_build:
   - pwsh: scripts/prepare-eclipse.ps1 -EclipseUrl $env:ECLIPSE_URL -EclipseFileHash $env:ECLIPSE_HASH -EGitUrl $env:EGIT_URL -EGitFileHash $env:EGIT_HASH
 build_script:
-  - pwsh: ./gradlew build
+  - pwsh: ./gradlew build --no-daemon
 on_finish:
   # upload test results
   - pwsh: |
