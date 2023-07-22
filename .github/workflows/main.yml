@@ -32,25 +32,6 @@ jobs:
           path: .build/eclipse
           key: ${{ runner.os }}.eclipse.${{ hashFiles('gradle.properties') }}
 
-      # TODO: Get rid of this; we no longer use Chocolatey
-      - name: Cache Chocolatey bin
-        uses: actions/cache@v2
-        with:
-          path: C:/ProgramData/chocolatey/bin
-          key: ${{ runner.os }}.eclipse.${{ hashFiles('.github/workflows/main.yml') }}
-      - name: Cache Chocolatey lib
-        uses: actions/cache@v2
-        with:
-          path: C:/ProgramData/chocolatey/lib
-          key: ${{ runner.os }}.eclipse.${{ hashFiles('.github/workflows/main.yml') }}
-
-#      - name: Install JDK 8
-#        run: "choco install openjdk8 --version 8.232.9"
-
-      - name: Prepare Eclipse dependency
-        shell: pwsh
-        run: scripts/prepare-eclipse.ps1 -EclipseUrl $env:ECLIPSE_URL -EclipseFileHash $env:ECLIPSE_HASH -EGitUrl $env:EGIT_URL -EGitFileHash $env:EGIT_HASH
-
       - name: Build
         shell: pwsh
         run: $env:PATH = "C:\Program Files\OpenJDK\openjdk-8u232-b09;$env:PATH"; $env:JAVA_HOME = "C:\Program Files\OpenJDK\openjdk-8u232-b09"; scripts/build.ps1
