@@ -20,7 +20,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '8.0.232+9.1'
-          check-latest: true
 
       - name: Cache downloads
         uses: actions/cache@v2
@@ -32,6 +31,8 @@ jobs:
         with:
           path: .build/eclipse
           key: ${{ runner.os }}.eclipse.${{ hashFiles('gradle.properties') }}
+
+      # TODO: Get rid of this; we no longer use Chocolatey
       - name: Cache Chocolatey bin
         uses: actions/cache@v2
         with:
