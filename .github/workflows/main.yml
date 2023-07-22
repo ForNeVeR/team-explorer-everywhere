@@ -15,6 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '8.0.232+9.1'
+          check-latest: true
+
       - name: Cache downloads
         uses: actions/cache@v2
         with:
@@ -36,8 +43,8 @@ jobs:
           path: C:/ProgramData/chocolatey/lib
           key: ${{ runner.os }}.eclipse.${{ hashFiles('.github/workflows/main.yml') }}
 
-      - name: Install JDK 8
-        run: "choco install openjdk8 --version 8.232.9"
+#      - name: Install JDK 8
+#        run: "choco install openjdk8 --version 8.232.9"
 
       - name: Prepare Eclipse dependency
         shell: pwsh
