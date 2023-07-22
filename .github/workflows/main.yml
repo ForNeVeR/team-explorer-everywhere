@@ -24,17 +24,17 @@ jobs:
       - name: Cache downloads
         uses: actions/cache@v2
         with:
-          path: .build/downloads
+          path: build/downloads
           key: ${{ runner.os }}.downloads.${{ hashFiles('gradle.properties') }}
       - name: Cache Eclipse
         uses: actions/cache@v2
         with:
-          path: .build/eclipse
+          path: build/eclipse
           key: ${{ runner.os }}.eclipse.${{ hashFiles('gradle.properties') }}
 
       - name: Build
         shell: pwsh
-        run: $env:PATH = "C:\Program Files\OpenJDK\openjdk-8u232-b09;$env:PATH"; $env:JAVA_HOME = "C:\Program Files\OpenJDK\openjdk-8u232-b09"; scripts/build.ps1
+        run: ./gradlew build --no-daemon
 
       - name: Upload test results
         if: always()
