@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}.eclipse.${{ hashFiles('.github/workflows/main.yml') }}
 
       - name: Install JDK 8
-        run: "cinst openjdk8 --version 8.232.9"
+        run: "choco install openjdk8 --version 8.232.9"
 
       - name: Prepare Eclipse dependency
         shell: pwsh
