@@ -21,6 +21,9 @@ jobs:
           distribution: 'adopt'
           java-version: '8.0.232+9.1'
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: Cache downloads
         uses: actions/cache@v2
         with:
@@ -34,7 +37,7 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build
         env:
           TEE_SERVER_URL: ${{ secrets.TEE_SERVER_URL }}
           TEE_TEAM_PROJECT: ${{ secrets.TEE_TEAM_PROJECT }}
