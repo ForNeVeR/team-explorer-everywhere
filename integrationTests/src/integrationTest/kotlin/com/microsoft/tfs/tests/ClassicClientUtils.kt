@@ -88,6 +88,7 @@ fun deleteWorkspace(clientExecutable: Path, path: Path) {
 }
 
 fun acceptClcEula(clientExecutable: Path) {
-    val exitCode = executeClient(clientExecutable, Paths.get("."), "eula")
-    assertTrue(exitCode == 0 || exitCode == 1, "Unexpected exit code $exitCode from \"tf eula\".")
+    val isWindows = System.getProperty("os.name").contains("win", ignoreCase = true)
+    val exitCode = executeClient(clientExecutable, Paths.get("."), "eula", if (isWindows) "/accept" else "-accept")
+    assertTrue(exitCode == 0 || exitCode == 1, "tf eula")
 }
