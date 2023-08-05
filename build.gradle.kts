@@ -70,7 +70,7 @@ tasks.named("build_4_antrunner") {
 }
 
 val antBuild: TaskProvider<Task> = tasks.named("ant-build")
-tasks.register("jar") {
+tasks.register("zip") {
     dependsOn(antBuild)
 }
 

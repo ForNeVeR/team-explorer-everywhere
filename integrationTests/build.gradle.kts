@@ -23,7 +23,7 @@ tasks.test {
 }
 
 val integrationTestTask = tasks.register<Test>("integrationTest") {
-    dependsOn(":jar")
+    dependsOn(":zip")
 
     description = "Runs integration tests."
     group = "verification"
