@@ -25,6 +25,8 @@ abstract class TfsClientTestFixture {
         val (dir, exe) = extractClientExecutable()
         clientExecutableDir = dir
         clientExecutable = exe
+
+        acceptClcEula(clientExecutable)
     }
 
     @OptIn(ExperimentalPathApi::class)

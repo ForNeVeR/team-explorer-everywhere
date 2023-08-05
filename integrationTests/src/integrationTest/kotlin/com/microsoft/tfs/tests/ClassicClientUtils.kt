@@ -9,7 +9,7 @@ import java.nio.file.Paths
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private fun executeClient(clientExecutable: Path, directory: Path, vararg arguments: String) {
+private fun executeClient(clientExecutable: Path, directory: Path, vararg arguments: String): Int {
     println("Running tf with arguments: [${arguments.joinToString(",")}]")
     val loginArgument = "-login:${IntegrationTestUtils.user},${IntegrationTestUtils.pass}"
     val process = ProcessBuilder(clientExecutable.toString(), loginArgument, *arguments)
@@ -23,25 +23,53 @@ private fun executeClient(clientExecutable: Path, directory: Path, vararg argume
         .inheritIO()
         .start()
     val exitCode = process.waitFor()
-    assertEquals(0, exitCode)
+    return exitCode
 }
 
 private fun tfCreateWorkspace(clientExecutable: Path, workspacePath: Path, name: String, isServer: Boolean) {
     val collectionUrl = IntegrationTestUtils.serverUrl
     val location = if (isServer) "server" else "local"
-    executeClient(clientExecutable, workspacePath, "workspace", "-new", "-collection:$collectionUrl", "-location:$location", name)
+    assertEquals(
+        0,
+        executeClient(
+            clientExecutable,
+            workspacePath,
+            "workspace",
+            "-new",
+            "-collection:$collectionUrl",
+            "-location:$location",
+            name
+        )
+    )
 }
 
 private fun tfDeleteWorkspace(clientExecutable: Path, workspacePath: Path, workspaceName: String) {
-    executeClient(clientExecutable, workspacePath, "workspace", "-delete", workspaceName)
+    assertEquals(
+        0,
+        executeClient(clientExecutable, workspacePath, "workspace", "-delete", workspaceName)
+    )
 }
 
 private fun tfCreateMapping(clientExecutable: Path, workspacePath: Path, workspaceName: String, serverPath: String, localPath: Path) {
-    executeClient(clientExecutable, workspacePath, "workfold", "-map", "-workspace:$workspaceName", serverPath, localPath.toString())
+    assertEquals(
+        0,
+        executeClient(
+            clientExecutable,
+            workspacePath,
+            "workfold",
+            "-map",
+            "-workspace:$workspaceName",
+            serverPath,
+            localPath.toString()
+        )
+    )
 }
 
 private fun tfGet(clientExecutable: Path, workspacePath: Path) {
-    executeClient(clientExecutable, workspacePath, "get")
+    assertEquals(
+        0,
+        executeClient(clientExecutable, workspacePath, "get")
+    )
 }
 
 fun cloneTestRepository(clientExecutable: Path, isServer: Boolean = false): Path {
@@ -57,4 +85,9 @@ fun cloneTestRepository(clientExecutable: Path, isServer: Boolean = false): Path
 fun deleteWorkspace(clientExecutable: Path, path: Path) {
     val workspaceName = "${path.fileName}.${IntegrationTestUtils.workspaceNameSuffix}"
     tfDeleteWorkspace(clientExecutable, path, workspaceName)
+}
+
+fun acceptClcEula(clientExecutable: Path) {
+    val exitCode = executeClient(clientExecutable, Paths.get("."), "eula")
+    assertTrue(exitCode == 0 || exitCode == 1, "Unexpected exit code $exitCode from \"tf eula\".")
 }
