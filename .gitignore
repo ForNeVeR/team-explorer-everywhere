@@ -4,6 +4,7 @@
 /build/eclipse/
 /build/resources/
 /build/tmp/
+/integrationTests/build/
 
 bin
 bin-test

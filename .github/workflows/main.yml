@@ -35,13 +35,25 @@ jobs:
       - name: Build
         shell: pwsh
         run: ./gradlew build --no-daemon
+        env:
+          TEE_SERVER_URL: ${{ secrets.TEE_SERVER_URL }}
+          TEE_TEAM_PROJECT: ${{ secrets.TEE_TEAM_PROJECT }}
+          TEE_USER: ${{ secrets.TEE_USER }}
+          TEE_PASS: ${{ secrets.TEE_PASS }}
 
-      - name: Upload test results
+      - name: Upload Ant test results
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-results
+          name: test-results.ant
           path: build/output/bin/testresults/unittests/*.xml
+
+      - name: Upload integration test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results.integration
+          path: integrationTests/build/reports
 
       - name: Upload CLC
         uses: actions/upload-artifact@v2

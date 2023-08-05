@@ -69,8 +69,13 @@ tasks.named("build_4_antrunner") {
     dependsOn("prepare-eclipse")
 }
 
+val antBuild: TaskProvider<Task> = tasks.named("ant-build")
+tasks.register("jar") {
+    dependsOn(antBuild)
+}
+
 tasks.register("build") {
-    dependsOn("ant-build")
+    dependsOn(antBuild)
 }
 
 tasks.wrapper {
