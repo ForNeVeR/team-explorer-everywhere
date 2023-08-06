@@ -69,3 +69,9 @@ jobs:
         with:
           name: SDK
           path: build/output/bin/sdk/*.zip
+  validation:
+    runs-on: ubuntu-22.04
+    name: "Validate Gradle wrapper"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
