@@ -2,12 +2,13 @@ name: Main
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
   schedule:
     - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   main:
@@ -25,12 +26,12 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Cache downloads
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: build/downloads
           key: ${{ runner.os }}.downloads.${{ hashFiles('gradle.properties') }}
       - name: Cache Eclipse
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: build/eclipse
           key: ${{ runner.os }}.eclipse.${{ hashFiles('gradle.properties') }}
@@ -46,26 +47,26 @@ jobs:
 
       - name: Upload Ant test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results.ant
           path: build/output/bin/testresults/unittests/*.xml
 
       - name: Upload integration test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results.integration
           path: integrationTests/build/reports
 
       - name: Upload CLC
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Client
           path: build/output/bin/clc/TEE-CLC-1*.zip
 
       - name: Upload SDK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: SDK
           path: build/output/bin/sdk/*.zip
