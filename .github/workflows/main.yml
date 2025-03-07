@@ -47,26 +47,26 @@ jobs:
 
       - name: Upload Ant test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results.ant
           path: build/output/bin/testresults/unittests/*.xml
 
       - name: Upload integration test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results.integration
           path: integrationTests/build/reports
 
       - name: Upload CLC
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Client
           path: build/output/bin/clc/TEE-CLC-1*.zip
 
       - name: Upload SDK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: SDK
           path: build/output/bin/sdk/*.zip
