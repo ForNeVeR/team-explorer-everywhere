@@ -6,7 +6,7 @@ This project contains:
 The purpose of this client is mainly to support [Azure DevOps Plugin for IntelliJ][azure-devops-intellij].
 
 ## What is the Command-line Client for TFS?
-The CLC for TFS allows you run version control commands from a console/terminal window against a TFS server on any operating system. 
+The CLC for TFS allows you run version control commands from a console/terminal window against a TFS server on any operating system.
 This tool is for use with Team Foundation Version Control (TFVC), a centralized version control system.
 If you prefer to use Git, you can use any Git client with TFS or Team Services as well.
 
@@ -25,7 +25,7 @@ Download the TEE-CLC-*.zip file in the [Releases](https://github.com/JetBrains/t
    * (Windows) `SET PATH=%JAVA_HOME%\bin;%PATH%`
    * (Linux) `PATH=$JAVA_HOME/bin:$PATH`
    * (Mac) `PATH=$JAVA_HOME/bin:$PATH`
-    
+
 ### Build
 
 Run the following shell command:
@@ -39,7 +39,7 @@ Test results are available in `build\output\bin\testresults`.
 
 ## Contributing
 We welcome pull requests. Please fork this repo and send us your contributions.
-See [Contributing](./Contributing.md) for details.
+See [Contributing][docs.contributing] for details.
 
 ## Localization / Translation
 Your language, your words, your plug-in for you!
@@ -52,3 +52,4 @@ Please click [Localization](./Localization.md) for details on how to contribute 
 
 [adoptopenjdk]: https://adoptopenjdk.net/
 [azure-devops-intellij]: https://github.com/microsoft/azure-devops-intellij
+[docs.contributing]: CONTRIBUTING.md
